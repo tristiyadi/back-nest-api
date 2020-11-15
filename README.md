@@ -19,10 +19,11 @@ $ git clone https://github.com/tristiyadi/back-nest-api.git
 
 ## Upgrading Package Projects
 
+```bash
 $ npm i -g npm-check-updates
 $ ncu -u
 $ npm install
-
+```
 
 ## License
 [MIT licensed](LICENSE).

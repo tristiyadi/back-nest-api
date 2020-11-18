@@ -8,25 +8,36 @@ import {
   Body,
   NotFoundException,
   UseGuards,
-  Request,
+  Req,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import { ApiTags, ApiOkResponse, ApiBearerAuth, ApiParam } from '@nestjs/swagger';
 
 import { OrdersService } from './orders.service';
-import { Orders as OrdersEntity } from '../shared/entity/orders.entity';
-import { OrdersDto } from '../shared/dto/orders.dto';
+import { Orders as OrdersEntity } from './../../core/entity/orders.entity';
+import { OrdersDto } from './../../core/dto/orders.dto';
 
 @Controller('orders')
+@ApiTags('orders')
 export class OrdersController {
   constructor(private readonly orderService: OrdersService) {}
 
   @Get()
+  @ApiOkResponse({ type: [OrdersDto] })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   async findAll() {
     // get all orders in the db
     return await this.orderService.findAll();
   }
 
   @Get(':id')
+  @ApiOkResponse({ type: OrdersDto })
+  @ApiParam({ name: 'id', required: true })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   async findOne(@Param('id') id: number): Promise<OrdersEntity> {
     // find the orders with this id
     const orders = await this.orderService.findOne(id);
@@ -40,22 +51,27 @@ export class OrdersController {
     return orders;
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Post()
+  @ApiOkResponse({ type: OrdersDto })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   async create(
     @Body() orders: OrdersDto,
-    @Request() req,
+    @Req() req,
   ): Promise<OrdersEntity> {
     // create a new orders and return the newly created orders
     return await this.orderService.create(orders, req.user.id);
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Put(':id')
+  @ApiOkResponse({ type: OrdersDto })
+  @ApiParam({ name: 'id', required: true })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
   async update(
     @Param('id') id: number,
     @Body() orders: OrdersDto,
-    @Request() req,
+    @Req() req,
   ): Promise<OrdersEntity> {
     // get the number of row affected and the updated orders
     const {
@@ -72,9 +88,12 @@ export class OrdersController {
     return updatedOrders;
   }
 
-  @UseGuards(AuthGuard('jwt'))
   @Delete(':id')
-  async remove(@Param('id') id: number, @Request() req) {
+  @ApiOkResponse({ type: OrdersDto })
+  @ApiParam({ name: 'id', required: true })
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard('jwt'))
+  async remove(@Param('id') id: number, @Req() req) {
     // delete the orders with this id
     const deleted = await this.orderService.delete(id, req.user.id);
 

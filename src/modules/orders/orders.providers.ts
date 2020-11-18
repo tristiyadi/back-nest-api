@@ -1,4 +1,4 @@
-import { Orders } from '../shared/entity/orders.entity';
+import { Orders } from '../../core/entity/orders.entity';
 import { ORDERS_REPOSITORY } from '../../core/constants';
 
 export const ordersProviders = [

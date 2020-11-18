@@ -1,8 +1,8 @@
 import { Injectable, Inject } from '@nestjs/common';
 
-import { Orders } from '../shared/entity/orders.entity';
-import { OrdersDto } from '../shared/dto/orders.dto';
-import { User } from '../shared/entity/user.entity';
+import { Orders } from './../../core/entity/orders.entity';
+import { OrdersDto } from '../../core/dto/orders.dto';
+import { User } from './../../core/entity/user.entity';
 import { ORDERS_REPOSITORY } from '../../core/constants';
 
 @Injectable()

@@ -2,8 +2,9 @@ import { Sequelize } from 'sequelize-typescript';
 
 import { SEQUELIZE, DEVELOPMENT, PRODUCTION } from '../constants';
 import { databaseConfig } from './database.config';
-import { User } from '../../modules/shared/entity/user.entity';
-import { Orders } from '../../modules/shared/entity/orders.entity';
+import { User } from '../entity/user.entity';
+import { Orders } from '../entity/orders.entity';
+import { Promotions } from '../entity/promotions.entity';
 
 export const databaseProviders = [
   {
@@ -11,9 +12,6 @@ export const databaseProviders = [
     useFactory: async () => {
       let config;
       switch (process.env.NODE_ENV) {
-        case DEVELOPMENT:
-          config = databaseConfig.development;
-          break;
         case PRODUCTION:
           config = databaseConfig.production;
           break;
@@ -21,7 +19,7 @@ export const databaseProviders = [
           config = databaseConfig.development;
       }
       const sequelize = new Sequelize(config);
-      sequelize.addModels([User, Orders]);
+      sequelize.addModels([User, Orders, Promotions]);
       await sequelize.sync();
       return sequelize;
     },
